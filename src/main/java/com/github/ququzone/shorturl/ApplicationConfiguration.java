@@ -2,6 +2,10 @@ package com.github.ququzone.shorturl;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.atomic.DistributedAtomicLong;
+import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -69,5 +73,18 @@ public class ApplicationConfiguration {
     @Bean
     public DataSourceTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
+    }
+
+    @Bean
+    public CuratorFramework curatorFramework() {
+        CuratorFramework client = CuratorFrameworkFactory.newClient(env.getProperty("zookeeper.connectionString"), new ExponentialBackoffRetry(1000, 3));
+        client.start();
+        return client;
+    }
+
+    @Bean
+    public DistributedAtomicLong distributedAtomicLong() {
+        return new DistributedAtomicLong(curatorFramework(), env.getProperty("zookeeper.counter.node"),
+                new ExponentialBackoffRetry(1000, 3));
     }
 }

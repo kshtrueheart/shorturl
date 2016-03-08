@@ -1,6 +1,7 @@
 package com.github.ququzone.shorturl;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * url model.
@@ -12,6 +13,11 @@ public class Url {
     private String url;
     private String code;
     private Date createdTime;
+
+    public void generateId() {
+        if (id == null || "".equals(id))
+            id = UUID.randomUUID().toString();
+    }
 
     public String getId() {
         return id;

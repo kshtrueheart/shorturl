@@ -1,5 +1,6 @@
 package com.github.ququzone.shorturl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class ShorturlController {
+    @Autowired
+    private UrlService service;
+
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public String create() {
-        return "hello, world.";
+    public Url create() {
+        return service.generate("ddd");
     }
 }
