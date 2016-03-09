@@ -1,5 +1,7 @@
 package com.github.ququzone.shorturl;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,9 +12,14 @@ import java.util.UUID;
  */
 public class Url {
     private String id;
+    @Expose
     private String url;
+    @Expose
     private String code;
+    @Expose
     private Date createdTime;
+    @Expose
+    private String shortUrl;
 
     public void generateId() {
         if (id == null || "".equals(id))
@@ -49,5 +56,13 @@ public class Url {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public String getShortUrl() {
+        return shortUrl;
+    }
+
+    public void setShortUrl(String shortUrl) {
+        this.shortUrl = shortUrl;
     }
 }

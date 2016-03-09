@@ -1,12 +1,10 @@
 package com.github.ququzone.shorturl;
 
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.atomic.AtomicValue;
 import org.apache.curator.framework.recipes.atomic.DistributedAtomicLong;
-import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +18,10 @@ import java.util.Date;
 @Service
 @Transactional
 public class UrlService {
-    @Autowired
-    private UrlMapper urlMapper;
+    private static final Logger LOG = LoggerFactory.getLogger(UrlService.class);
 
     @Autowired
-    private Environment env;
+    private UrlMapper urlMapper;
 
     @Autowired
     private DistributedAtomicLong distributedAtomicLong;
@@ -35,13 +32,20 @@ public class UrlService {
             if (value.succeeded()) {
                 Url result = new Url();
                 result.generateId();
+                result.setUrl(url);
                 result.setCreatedTime(new Date());
-                result.setCode("" + value.preValue());
+                result.setCode(CodeTransfer.decode(value.preValue()));
+                urlMapper.insert(result);
                 return result;
             }
+            throw new RuntimeException("increment counter fail.");
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("generate url exception", e);
+            throw new RuntimeException("generate url exception");
         }
-        return null;
+    }
+
+    public Url getUrlByCode(String code) {
+        return urlMapper.findByCode(code);
     }
 }
