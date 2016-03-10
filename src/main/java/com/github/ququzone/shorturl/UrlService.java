@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * url service.
@@ -20,6 +21,8 @@ import java.util.Date;
 public class UrlService {
     private static final Logger LOG = LoggerFactory.getLogger(UrlService.class);
 
+    private static Pattern URL = Pattern.compile("https?://[^\\s]+");
+
     @Autowired
     private UrlMapper urlMapper;
 
@@ -28,6 +31,9 @@ public class UrlService {
 
     public Url generate(String url) {
         try {
+            if (URL.matcher(url).matches()) {
+                throw new RuntimeException("invalid url");
+            }
             AtomicValue<Long> value = distributedAtomicLong.increment();
             if (value.succeeded()) {
                 Url result = new Url();
