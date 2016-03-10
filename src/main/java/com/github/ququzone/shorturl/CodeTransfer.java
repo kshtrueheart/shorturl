@@ -22,15 +22,13 @@ public class CodeTransfer {
         Long rest = number;
         Stack<Character> stack = new Stack<>();
         StringBuilder result = new StringBuilder(6);
-        while (rest != 0) {
+        do {
             stack.add(array[new Long((rest - (rest / 62) * 62)).intValue()]);
             rest = rest / 62;
-        }
+        } while (rest != 0);
         for (; !stack.isEmpty(); ) {
             result.append(stack.pop());
         }
         return result.toString();
-
     }
-
 }

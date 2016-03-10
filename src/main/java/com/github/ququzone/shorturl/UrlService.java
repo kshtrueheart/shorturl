@@ -31,7 +31,7 @@ public class UrlService {
 
     public Url generate(String url) {
         try {
-            if (URL.matcher(url).matches()) {
+            if (!URL.matcher(url).matches()) {
                 throw new RuntimeException("invalid url");
             }
             AtomicValue<Long> value = distributedAtomicLong.increment();
@@ -47,7 +47,7 @@ public class UrlService {
             throw new RuntimeException("increment counter fail.");
         } catch (Exception e) {
             LOG.error("generate url exception", e);
-            throw new RuntimeException("generate url exception");
+            throw new RuntimeException(e.getMessage());
         }
     }
 
