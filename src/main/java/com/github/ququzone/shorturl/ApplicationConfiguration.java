@@ -65,7 +65,7 @@ public class ApplicationConfiguration {
 
             return sessionFactory.getObject();
         } catch (Exception e) {
-            logger.warn("Could not confiure mybatis session factory");
+            logger.warn("Could not configure mybatis session factory");
             return null;
         }
     }
