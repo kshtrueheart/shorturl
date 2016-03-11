@@ -1,7 +1,5 @@
 package com.github.ququzone.shorturl;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -14,11 +12,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 public class ShorturlController {
-    private static final Gson DEFAULT_GSON = new GsonBuilder()
-            .serializeNulls()
-            .excludeFieldsWithoutExposeAnnotation()
-            .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
     @Autowired
     private UrlService service;
 
@@ -29,9 +22,7 @@ public class ShorturlController {
     public
     @ResponseBody
     String create(@RequestParam("url") String url) {
-        Url result = service.generate(url);
-        result.setShortUrl(env.getProperty("base.url") + "/" + result.getCode());
-        return DEFAULT_GSON.toJson(result);
+        return GsonUtils.DEFAULT_GSON.toJson(service.generate(url));
     }
 
     @RequestMapping(value = "/{code}", method = RequestMethod.GET)

@@ -3,7 +3,6 @@ package com.github.ququzone.shorturl;
 import com.google.gson.annotations.Expose;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * url model.
@@ -11,7 +10,6 @@ import java.util.UUID;
  * @author Yang XuePing
  */
 public class Url {
-    private String id;
     @Expose
     private String url;
     @Expose
@@ -20,19 +18,6 @@ public class Url {
     private Date createdTime;
     @Expose
     private String shortUrl;
-
-    public void generateId() {
-        if (id == null || "".equals(id))
-            id = UUID.randomUUID().toString();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUrl() {
         return url;
