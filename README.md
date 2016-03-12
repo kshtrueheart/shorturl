@@ -2,12 +2,14 @@ Short url service
 =================
 
 ## Install Service
-### Install PostgreSQL and create db
+### Install Redis
 
 ```
-$ createdb shorturl
-$ psql shorturl
-$ // create urls tables
+$ wget http://download.redis.io/releases/redis-3.0.7.tar.gz
+$ tar xzf redis-3.0.7.tar.gz
+$ cd redis-3.0.7
+$ make
+$ src/redis-server
 ```
 
 ### Install ZooKeeper
