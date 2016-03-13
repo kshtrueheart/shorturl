@@ -18,6 +18,11 @@ public class ShorturlController {
     @Autowired
     private Environment env;
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String index() {
+        return "index";
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public
     @ResponseBody
