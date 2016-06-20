@@ -22,8 +22,6 @@ import java.util.regex.Pattern;
 public class UrlService {
     private static final Logger LOG = LoggerFactory.getLogger(UrlService.class);
 
-    private static Pattern URL = Pattern.compile("https?://[^\\s]+");
-
     @Autowired
     private JedisPool pool;
 
@@ -35,9 +33,6 @@ public class UrlService {
 
     public Url generate(String url) {
         try (Jedis jedis = pool.getResource()) {
-            if (!URL.matcher(url).matches()) {
-                throw new RuntimeException("invalid url");
-            }
             AtomicValue<Long> value = distributedAtomicLong.increment();
             if (value.succeeded()) {
                 Url result = new Url();
